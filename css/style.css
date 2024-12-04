@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>포트폴리오 게시판</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <header>
+        <nav>
+            <h1>포트폴리오</h1>
+            <ul>
+                <li><a href="#home">홈</a></li>
+                <li><a href="#projects">프로젝트</a></li>
+                <li><a href="#about">소개</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <main>
+        <section id="home">
+            <h2>나의 작업물들</h2>
+            <div class="project-grid">
+                <!-- 프로젝트 카드들이 여기에 들어갈 예정 -->
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <p>&copy; 2024 포트폴리오 게시판</p>
+    </footer>
+
+    <script src="js/main.js"></script>
+</body>
+</html>
