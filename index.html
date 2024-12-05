@@ -4,7 +4,100 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>포트폴리오 게시판</title>
-    <link rel="stylesheet" href="css/style.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Arial', sans-serif;
+            line-height: 1.6;
+            background-color: #f5f7fa;
+            color: #333;
+        }
+
+        header {
+            background: white;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            padding: 1rem;
+        }
+
+        nav {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        nav h1 {
+            font-size: 1.5rem;
+        }
+
+        nav ul {
+            display: flex;
+            list-style: none;
+            gap: 2rem;
+        }
+
+        nav a {
+            text-decoration: none;
+            color: #333;
+        }
+
+        main {
+            max-width: 1200px;
+            margin: 2rem auto;
+            padding: 0 1rem;
+        }
+
+        .hero-section {
+            text-align: center;
+            margin-bottom: 3rem;
+        }
+
+        .hero-section h2 {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .filter-buttons {
+            display: flex;
+            justify-content: center;
+            gap: 1rem;
+            margin: 2rem 0;
+        }
+
+        .filter-btn {
+            padding: 0.5rem 1.5rem;
+            border: none;
+            border-radius: 4px;
+            background: white;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .filter-btn:hover,
+        .filter-btn.active {
+            background: #007bff;
+            color: white;
+        }
+
+        .project-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 2rem;
+        }
+
+        footer {
+            text-align: center;
+            padding: 2rem;
+            margin-top: 3rem;
+            background: white;
+        }
+    </style>
 </head>
 <body>
     <header>
@@ -21,7 +114,7 @@
     <main>
         <section id="home" class="hero-section">
             <h2>나의 작업물들</h2>
-            <p class="subtitle">포트폴리오 프로젝트 모음집</p>
+            <p>포트폴리오 프로젝트 모음집</p>
             
             <div class="filter-buttons">
                 <button class="filter-btn active" data-category="all">전체</button>
@@ -30,7 +123,7 @@
             </div>
             
             <div class="project-grid">
-                <!-- JavaScript로 동적 생성됨 -->
+                <!-- 프로젝트 카드들이 여기에 동적으로 추가됩니다 -->
             </div>
         </section>
     </main>
@@ -39,6 +132,59 @@
         <p>&copy; 2024 포트폴리오 게시판</p>
     </footer>
 
-    <script src="js/main.js"></script>
+    <script>
+        // 프로젝트 데이터
+        const projects = [
+            {
+                id: 1,
+                title: "프로젝트 1",
+                category: "웹 개발",
+                description: "첫 번째 프로젝트 설명입니다.",
+                image: "https://via.placeholder.com/300x200"
+            },
+            {
+                id: 2,
+                title: "프로젝트 2",
+                category: "앱 개발",
+                description: "두 번째 프로젝트 설명입니다.",
+                image: "https://via.placeholder.com/300x200"
+            }
+        ];
+
+        // 프로젝트 카드 생성
+        function createProjectCard(project) {
+            return `
+                <article class="project-card">
+                    <img src="${project.image}" alt="${project.title}">
+                    <h3>${project.title}</h3>
+                    <p>${project.description}</p>
+                    <button onclick="showDetail(${project.id})">자세히 보기</button>
+                </article>
+            `;
+        }
+
+        // 프로젝트 표시
+        function displayProjects(category = 'all') {
+            const filtered = category === 'all' 
+                ? projects 
+                : projects.filter(p => p.category === category);
+            
+            document.querySelector('.project-grid').innerHTML = 
+                filtered.map(createProjectCard).join('');
+        }
+
+        // 초기 로드
+        displayProjects();
+
+        // 필터 버튼 이벤트
+        document.querySelector('.filter-buttons').addEventListener('click', (e) => {
+            if (e.target.classList.contains('filter-btn')) {
+                document.querySelectorAll('.filter-btn').forEach(btn => 
+                    btn.classList.remove('active'));
+                e.target.classList.add('active');
+                displayProjects(e.target.dataset.category);
+            }
+        });
+    </script>
 </body>
 </html>
