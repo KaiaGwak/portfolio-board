@@ -1,65 +1,36 @@
 <!DOCTYPE html>
-<html lang="ko">
+<html lang="ja">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>프로젝트 상세</title>
-    <link rel="stylesheet" href="css/style.css">
+    <title>Portfolio</title>
+    <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <header>
-        <nav>
-            <h1>포트폴리오</h1>
-            <ul>
-                <li><a href="#home">홈</a></li>
-                <li><a href="#projects">프로젝트</a></li>
-                <li><a href="#about">소개</a></li>
-                <li><button id="darkModeToggle" class="dark-mode-btn">🌙</button></li>
+    <header class="header">
+        <nav class="nav container">
+            <h1 class="nav__logo">Portfolio</h1>
+            <ul class="nav__menu">
+                <li><a href="#home">ホーム</a></li>
+                <li><a href="#projects">プロジェクト</a></li>
+                <li><a href="#about">概要</a></li>
             </ul>
+            <div class="nav__controls">
+                <select class="lang-switch">
+                    <option value="ja">日本語</option>
+                    <option value="en">English</option>
+                </select>
+                <button class="theme-toggle">🌙</button>
+            </div>
         </nav>
     </header>
 
-    <main class="project-detail">
-        <div class="project-header">
-            <h2 class="project-title">프로젝트 제목</h2>
-            <p class="project-category">카테고리</p>
-        </div>
-        
-        <div class="project-content">
-            <div class="project-images">
-                <img src="https://via.placeholder.com/800x400" alt="프로젝트 메인 이미지">
-            </div>
-            
-            <div class="project-info">
-                <h3>프로젝트 소개</h3>
-                <p class="project-description">상세한 프로젝트 설명이 들어갑니다.</p>
-                
-                <h3>사용 기술</h3>
-                <ul class="tech-stack">
-                    <li>HTML</li>
-                    <li>CSS</li>
-                    <li>JavaScript</li>
-                </ul>
-                
-                <h3>주요 기능</h3>
-                <ul class="features">
-                    <li>기능 1</li>
-                    <li>기능 2</li>
-                    <li>기능 3</li>
-                </ul>
-                
-                <div class="project-links">
-                    <a href="#" class="button">GitHub</a>
-                    <a href="#" class="button">Live Demo</a>
-                </div>
-            </div>
-        </div>
+    <main>
+        <!-- 여기에 컨텐츠가 들어갑니다 -->
     </main>
 
     <footer>
-        <p>&copy; 2024 포트폴리오 게시판</p>
+        <p>&copy; 2024 Portfolio</p>
     </footer>
-
-    <script src="js/project.js"></script>
 </body>
 </html>
