@@ -43,5 +43,5 @@ GitHub: https://github.com/KaiaGwak
 
 ## Contributing 🤝
 Feel free to fork this repository and submit pull requests. You can also open issues for any bugs or improvements.
-License 📄
+## License 📄
 [License details]
