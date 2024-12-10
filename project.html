@@ -4,33 +4,79 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Portfolio</title>
+    <!-- CSS 파일 경로 수정 -->
+    <link rel="stylesheet" href="css/style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>プロジェクト詳細 | Portfolio</title>
     <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@300;400;500;700&display=swap" rel="stylesheet">
 </head>
 <body>
-    <header class="header">
+    <header>
         <nav class="nav container">
             <h1 class="nav__logo">Portfolio</h1>
-            <ul class="nav__menu">
-                <li><a href="#home">ホーム</a></li>
-                <li><a href="#projects">プロジェクト</a></li>
-                <li><a href="#about">概要</a></li>
-            </ul>
-            <div class="nav__controls">
-                <select class="lang-switch">
-                    <option value="ja">日本語</option>
-                    <option value="en">English</option>
-                </select>
-                <button class="theme-toggle">🌙</button>
+            <div class="nav__menu-container">
+                <ul class="nav__menu">
+                    <li><a href="index.html" data-lang="home">ホーム</a></li>
+                    <li><a href="#" data-lang="projects">プロジェクト</a></li>
+                    <li><a href="#" data-lang="about">概要</a></li>
+                </ul>
+                <div class="nav__controls">
+                    <select class="lang-switch">
+                        <option value="ja">日本語</option>
+                        <option value="en">English</option>
+                    </select>
+                    <button class="theme-toggle">🌙</button>
+                </div>
             </div>
         </nav>
     </header>
 
-    <main>
-        <!-- 여기에 컨텐츠가 들어갑니다 -->
+    <main class="project-detail">
+        <div class="container">
+            <div class="breadcrumb">
+                <a href="index.html">ホーム</a> 
+                <span class="separator">/</span> 
+                <span>プロジェクト詳細</span>
+            </div>
+
+            <article class="project-content">
+                <header class="project-header">
+                    <h1 class="project-title" id="projectTitle"></h1>
+                    <p class="project-category" id="projectCategory"></p>
+                </header>
+
+                <div class="project-gallery">
+                    <img id="projectImage" class="project-main-image" alt="">
+                </div>
+
+                <div class="project-info">
+                    <section class="info-section">
+                        <h2>概要</h2>
+                        <p id="projectDescription"></p>
+                    </section>
+
+                    <section class="info-section">
+                        <h2>使用技術</h2>
+                        <ul class="tech-list" id="techStack"></ul>
+                    </section>
+
+                    <div class="project-links">
+                        <a href="#" class="button" id="githubLink" target="_blank">GitHub</a>
+                        <a href="#" class="button" id="demoLink" target="_blank">デモを見る</a>
+                    </div>
+                </div>
+            </article>
+        </div>
     </main>
 
     <footer>
         <p>&copy; 2024 Portfolio</p>
     </footer>
+
+    <script src="project.js"></script>
 </body>
 </html>
+<script src="js/project.js"></script> 
