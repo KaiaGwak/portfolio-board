@@ -1,4 +1,4 @@
-// Language Support
+// Language translations
 const translations = {
     ja: {
         'project-overview': 'プロジェクト概要',
@@ -16,9 +16,11 @@ const translations = {
     }
 };
 
-let currentLang = 'ja';
+// State Management
+let currentLang = localStorage.getItem('language') || 'ja';
+let currentTheme = localStorage.getItem('theme') || 'light';
 
-// Project Data (실제로는 API나 데이터베이스에서 가져올 수 있습니다)
+// Project Data
 const projects = [
     {
         id: 1,
@@ -28,51 +30,79 @@ const projects = [
             ja: '詳細な説明文がここに入ります。',
             en: 'Detailed description goes here.'
         },
-        image: 'https://via.placeholder.com/1200x600',
+        image: '/images/project1.jpg',
         techStack: ['HTML', 'CSS', 'JavaScript', 'React'],
         github: 'https://github.com/username/project1',
-        demo: 'https://project1-demo.com',
-        images: [
-            'https://via.placeholder.com/800x600',
-            'https://via.placeholder.com/800x600'
-        ]
-    },
-    // 더 많은 프로젝트 추가
+        demo: 'https://project1-demo.com'
+    }
 ];
 
-// Get project ID from URL
-function getProjectId() {
-    const params = new URLSearchParams(window.location.search);
-    return parseInt(params.get('id'));
+// Theme Management
+function initTheme() {
+    const themeToggle = document.querySelector('.theme-toggle');
+    
+    function setTheme(theme) {
+        document.documentElement.classList.toggle('dark-theme', theme === 'dark');
+        themeToggle.textContent = theme === 'dark' ? '☀️' : '🌙';
+        localStorage.setItem('theme', theme);
+        currentTheme = theme;
+    }
+
+    setTheme(currentTheme);
+    
+    themeToggle?.addEventListener('click', () => {
+        setTheme(currentTheme === 'dark' ? 'light' : 'dark');
+    });
 }
 
-// Load Project Details
-function loadProjectDetails() {
-    const projectId = getProjectId();
-    const project = projects.find(p => p.id === projectId);
+// Language Management
+function initLanguage() {
+    const langSwitch = document.querySelector('.lang-switch');
     
+    function updateLanguage(lang) {
+        document.documentElement.lang = lang;
+        localStorage.setItem('language', lang);
+        currentLang = lang;
+        
+        document.querySelectorAll('[data-lang]').forEach(element => {
+            const key = element.dataset.lang;
+            if (translations[lang][key]) {
+                element.textContent = translations[lang][key];
+            }
+        });
+        
+        loadProjectDetails();
+    }
+
+    langSwitch.value = currentLang;
+    updateLanguage(currentLang);
+
+    langSwitch?.addEventListener('change', (e) => {
+        updateLanguage(e.target.value);
+    });
+}
+
+// Project Detail Management
+function loadProjectDetails() {
+    const projectId = new URLSearchParams(window.location.search).get('id');
+    const project = projects.find(p => p.id === parseInt(projectId));
+
     if (!project) {
         window.location.href = 'index.html';
         return;
     }
 
-    // Update page title
     document.title = `${project.title[currentLang]} | Portfolio`;
-
-    // Update content
     document.getElementById('projectTitle').textContent = project.title[currentLang];
     document.getElementById('projectCategory').textContent = project.category[currentLang];
     document.getElementById('projectDescription').textContent = project.description[currentLang];
     document.getElementById('projectImage').src = project.image;
-    document.getElementById('projectImage').alt = project.title[currentLang];
-
-    // Update tech stack
+    
     const techList = document.getElementById('techStack');
     techList.innerHTML = project.techStack
         .map(tech => `<li class="tech-item">${tech}</li>`)
         .join('');
 
-    // Update links
     const githubLink = document.getElementById('githubLink');
     const demoLink = document.getElementById('demoLink');
     
@@ -89,64 +119,9 @@ function loadProjectDetails() {
     }
 }
 
-// Update Language
-function updateLanguage(lang) {
-    currentLang = lang;
-    document.documentElement.lang = lang;
-    
-    // Update translations
-    document.querySelectorAll('[data-lang]').forEach(element => {
-        const key = element.dataset.lang;
-        if (translations[lang][key]) {
-            element.textContent = translations[lang][key];
-        }
-    });
-
-    // Reload project details with new language
-    loadProjectDetails();
-}
-
-// Image Gallery Navigation
-function initializeGallery() {
-    const projectId = getProjectId();
-    const project = projects.find(p => p.id === projectId);
-    
-    if (project.images && project.images.length > 1) {
-        const gallery = document.querySelector('.project-gallery');
-        const dots = document.createElement('div');
-        dots.className = 'gallery-dots';
-        
-        project.images.forEach((_, index) => {
-            const dot = document.createElement('button');
-            dot.className = 'gallery-dot' + (index === 0 ? ' active' : '');
-            dot.onclick = () => showImage(index);
-            dots.appendChild(dot);
-        });
-        
-        gallery.appendChild(dots);
-    }
-}
-
-function showImage(index) {
-    const projectId = getProjectId();
-    const project = projects.find(p => p.id === projectId);
-    const mainImage = document.getElementById('projectImage');
-    
-    mainImage.src = project.images[index];
-    
-    document.querySelectorAll('.gallery-dot').forEach((dot, i) => {
-        dot.classList.toggle('active', i === index);
-    });
-}
-
-// Event Listeners
-document.querySelector('.lang-switch')?.addEventListener('change', (e) => {
-    updateLanguage(e.target.value);
-});
-
 // Initialize
 document.addEventListener('DOMContentLoaded', () => {
+    initTheme();
+    initLanguage();
     loadProjectDetails();
-    initializeGallery();
-    updateLanguage(currentLang);
 });

@@ -1,73 +1,135 @@
-// 프로젝트 데이터
+// Constants and Configurations
+const translations = {
+    ja: {
+        'home': 'ホーム',
+        'projects': 'プロジェクト',
+        'about': '概要',
+        'filter-all': 'すべて',
+        'filter-web': 'ウェブ開発',
+        'filter-app': 'アプリ開発'
+    },
+    en: {
+        'home': 'Home',
+        'projects': 'Projects',
+        'about': 'About',
+        'filter-all': 'All',
+        'filter-web': 'Web Development',
+        'filter-app': 'App Development'
+    }
+};
+
+// Sample project data
 const projects = [
     {
         id: 1,
-        title: "프로젝트 1",
-        category: "웹 개발",
-        description: "첫 번째 프로젝트 설명입니다. 이 프로젝트는 어떤 기술을 사용했고, 어떤 문제를 해결했는지 설명합니다.",
-        image: "https://via.placeholder.com/300x200",
-    },
-    {
-        id: 2,
-        title: "프로젝트 2",
-        category: "앱 개발",
-        description: "두 번째 프로젝트 설명입니다. 이 프로젝트는 어떤 기술을 사용했고, 어떤 문제를 해결했는지 설명합니다.",
-        image: "https://via.placeholder.com/300x200",
-    },
-    {
-        id: 3,
-        title: "프로젝트 3",
-        category: "웹 개발",
-        description: "세 번째 프로젝트 설명입니다. 이 프로젝트는 어떤 기술을 사용했고, 어떤 문제를 해결했는지 설명합니다.",
-        image: "https://via.placeholder.com/300x200",
+        title: { ja: 'プロジェクト1', en: 'Project 1' },
+        category: { ja: 'ウェブ開発', en: 'Web Development' },
+        description: {
+            ja: '詳細な説明文がここに入ります。',
+            en: 'Detailed description goes here.'
+        },
+        image: '/images/project1.jpg',
+        techStack: ['HTML', 'CSS', 'JavaScript', 'React'],
+        github: 'https://github.com/username/project1',
+        demo: 'https://project1-demo.com'
     }
 ];
 
-// 프로젝트 카드 HTML 생성
-function createProjectCard(project) {
-    return `
-        <article class="project-card">
-            <div class="project-image">
-                <img src="${project.image}" alt="${project.title}">
-            </div>
-            <div class="project-content">
-                <h3>${project.title}</h3>
-                <p class="project-category">${project.category}</p>
-                <p class="project-description">${project.description}</p>
-                <div class="project-links">
-                    <a href="project.html?id=${project.id}" class="button">자세히 보기</a>
-                </div>
-            </div>
-        </article>
-    `;
-}
+// State Management
+let currentLang = localStorage.getItem('language') || 'ja';
+let currentTheme = localStorage.getItem('theme') || 'light';
 
-// 프로젝트 필터링 및 표시
-function filterProjects(category) {
-    const filteredProjects = category === 'all' 
-        ? projects 
-        : projects.filter(project => project.category === category);
+// Theme Management
+function initTheme() {
+    const themeToggle = document.querySelector('.theme-toggle');
     
-    const projectGrid = document.querySelector('.project-grid');
-    projectGrid.innerHTML = filteredProjects.map(project => createProjectCard(project)).join('');
-}
+    function setTheme(theme) {
+        document.documentElement.classList.toggle('dark-theme', theme === 'dark');
+        themeToggle.textContent = theme === 'dark' ? '☀️' : '🌙';
+        localStorage.setItem('theme', theme);
+        currentTheme = theme;
+    }
 
-// 버튼 클릭 이벤트 처리
-function handleFilterClick(e) {
-    if (!e.target.classList.contains('filter-btn')) return;
+    setTheme(currentTheme);
     
-    // 활성 버튼 스타일 변경
-    document.querySelectorAll('.filter-btn').forEach(btn => {
-        btn.classList.remove('active');
+    themeToggle?.addEventListener('click', () => {
+        setTheme(currentTheme === 'dark' ? 'light' : 'dark');
     });
-    e.target.classList.add('active');
-    
-    // 프로젝트 필터링
-    filterProjects(e.target.dataset.category);
 }
 
-// 페이지 로드 시 실행
+// Language Management
+function initLanguage() {
+    const langSwitch = document.querySelector('.lang-switch');
+    
+    function updateLanguage(lang) {
+        document.documentElement.lang = lang;
+        localStorage.setItem('language', lang);
+        currentLang = lang;
+        
+        document.querySelectorAll('[data-lang]').forEach(element => {
+            const key = element.dataset.lang;
+            if (translations[lang][key]) {
+                element.textContent = translations[lang][key];
+            }
+        });
+        
+        // 프로젝트 목록 새로고침
+        initProjects();
+    }
+
+    langSwitch.value = currentLang;
+    updateLanguage(currentLang);
+
+    langSwitch?.addEventListener('change', (e) => {
+        updateLanguage(e.target.value);
+    });
+}
+
+// Project Management
+function initProjects() {
+    const projectGrid = document.querySelector('.project-grid');
+    const filterButtons = document.querySelectorAll('.filter-btn');
+
+    function createProjectCard(project) {
+        return `
+            <article class="project-card">
+                <div class="project-image">
+                    <img src="${project.image}" alt="${project.title[currentLang]}">
+                </div>
+                <div class="project-content">
+                    <h3>${project.title[currentLang]}</h3>
+                    <span class="project-category">${project.category[currentLang]}</span>
+                    <p class="project-description">${project.description[currentLang]}</p>
+                    <div class="project-links">
+                        <a href="project-detail.html?id=${project.id}" class="button">詳細を見る</a>
+                    </div>
+                </div>
+            </article>
+        `;
+    }
+
+    function filterProjects(category) {
+        const filteredProjects = category === 'all' 
+            ? projects 
+            : projects.filter(project => project.category[currentLang].toLowerCase().includes(category));
+
+        projectGrid.innerHTML = filteredProjects.map(createProjectCard).join('');
+        
+        filterButtons.forEach(btn => {
+            btn.classList.toggle('active', btn.dataset.category === category);
+        });
+    }
+
+    filterButtons?.forEach(btn => {
+        btn.addEventListener('click', () => filterProjects(btn.dataset.category));
+    });
+
+    filterProjects('all');
+}
+
+// Initialize
 document.addEventListener('DOMContentLoaded', () => {
-    filterProjects('all');  // 초기 프로젝트 표시
-    document.querySelector('.filter-buttons').addEventListener('click', handleFilterClick);
+    initTheme();
+    initLanguage();
+    initProjects();
 });
